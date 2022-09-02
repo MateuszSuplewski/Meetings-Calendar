@@ -1,23 +1,26 @@
 import React from 'react'
 import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
+import CalendarProvider from './CalendarProvider'
+
+const initialFormData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  date: '',
+  time: ''
+}
 
 export class Calendar extends React.Component {
     state = {
       meetings: null,
-      form: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        date: '',
-        time: ''
-      }
+      form: initialFormData
     }
 
-    api = 'http://localhost:3005/meetings'
+    api = new CalendarProvider('http://localhost:3005')
 
     componentDidMount () {
-      this._fetch()
+      this.api.load('meetings')
         .then(data => this.setState({ meetings: [...data] }))
     }
 
@@ -25,17 +28,12 @@ export class Calendar extends React.Component {
       event.preventDefault()
       const { meetings, form } = this.state
 
-      const options = {
-        method: 'POST',
-        body: JSON.stringify(form),
-        headers: { 'Content-Type': 'application/json' }
-      }
-
-      this._fetch(options)
+      this.api.add(form, 'meetings')
         .then(data => {
           const { id } = data
           this.setState({
-            meetings: [...meetings, { ...form, id }]
+            meetings: [...meetings, { ...form, id }],
+            form: initialFormData
           })
         })
     }
@@ -46,17 +44,6 @@ export class Calendar extends React.Component {
       form[inputName] = value
       this.setState({ form })
     }
-
-    _fetch (options, additionalPath = '') {
-      const url = `${this.api}${additionalPath}`
-      return fetch(url, options)
-        .then(resp => {
-          if (resp.ok) return resp.json()
-          return Promise.reject(resp)
-        })
-    }
-
-    // Api methods
 
     render () {
       const { meetings, form } = this.state
