@@ -1,29 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classes from './styles.module.css'
+import CalendarItem from '../CalendarItem/CalendarItem'
 
 export class CalendarList extends React.Component {
   render () {
     const { className, meetings, ...otherProps } = this.props
 
     return (
-      <li
+      <ul
         className={`${classes.root}${className ? ` ${className}` : ''}`}
         {...otherProps}
       >
-        {meetings.map((meeting) => {
-          const { firstName, lastName, email, date, time, id } = meeting
-          return (
-            <div key={id}>
-              <p>{firstName}</p>
-              <p>{lastName}</p>
-              <p>{email}</p>
-              <p>{date}</p>
-              <p>{time}</p>
-            </div>
-          )
-        })}
-      </li>
+        {meetings.map((meeting) => (
+          <CalendarItem
+            key={meeting.id}
+            meeting={meeting}
+          />
+        )
+        )}
+      </ul>
     )
   }
 }

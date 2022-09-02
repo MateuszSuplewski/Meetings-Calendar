@@ -47,19 +47,23 @@ export class Calendar extends React.Component {
 
     render () {
       const { meetings, form } = this.state
+      const inputNames = Array.from(Object.keys(form))
+      const inputValues = Array.from(Object.values(form))
+
       return (
-        <div>
+        <>
           {!meetings ?
             'No meetings'
             :
             <CalendarList meetings={meetings}/>
           }
           <CalendarForm
-            form={form}
-            onSubmit={this.addMeeting}
+            inputNames={inputNames}
+            inputValues={inputValues}
+            addMeeting={this.addMeeting}
             handleInput={this.handleInput}
           />
-        </div>
+        </>
       )
     }
 }

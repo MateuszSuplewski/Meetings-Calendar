@@ -1,44 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Input from '../Input'
 import classes from './styles.module.css'
 
 export class CalendarForm extends React.Component {
   render () {
-    const { className, handleInput, onSubmit, form, ...otherProps } = this.props
-    const { firstName, lastName, email, date, time } = form
+    const { className, handleInput, addMeeting, inputNames, inputValues, ...otherProps } = this.props
     return (
       <form
-        onSubmit={onSubmit}
+        onSubmit={addMeeting}
         className={`${classes.root}${className ? ` ${className}` : ''}`}
         {...otherProps}
       >
-        Imie:
+        {
+        inputNames.map((inputName, index) => (
+          <Input
+            key={inputName}
+            type={'text'}
+            value={inputValues[index]}
+            label={inputName}
+            handleInput={handleInput}
+          />
+        )
+        )}
         <input
-          value={firstName}
-          onChange={(event) => handleInput(event, 'firstName')}
-        />
-        Nazwisko:
-        <input
-          value={lastName}
-          onChange={(event) => handleInput(event, 'lastName')}
-        />
-        Email:
-        <input
-          value={email}
-          onChange={(event) => handleInput(event, 'email')}
-        />
-        Data:
-        <input
-          value={date}
-          onChange={(event) => handleInput(event, 'date')}
-        />
-        Czas:
-        <input
-          value={time}
-          onChange={(event) => handleInput(event, 'time')}
-        />
-        <input
-          value={'DODAJ'}
+          value={'ADD'}
           type={'submit'}
         />
       </form>
@@ -48,15 +34,10 @@ export class CalendarForm extends React.Component {
 
 CalendarForm.propTypes = {
   className: PropTypes.string,
-  handleInput: PropTypes.func,
-  onSubmit: PropTypes.func,
-  form: PropTypes.shape({
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired
-  })
+  handleInput: PropTypes.func.isRequired,
+  addMeeting: PropTypes.func.isRequired,
+  inputNames: PropTypes.array.isRequired,
+  inputValues: PropTypes.array.isRequired
 }
 
 export default CalendarForm
