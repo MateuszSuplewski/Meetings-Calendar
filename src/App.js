@@ -1,9 +1,10 @@
 import React from 'react'
+import Calendar from './Calendar'
 
 export const App = () => {
   return (
     <div>
-      CodeRoad APP
+      <Calendar/>
     </div>
   )
 }
