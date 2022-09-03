@@ -24,6 +24,7 @@ export class CalendarForm extends React.Component {
         )
         )}
         <input
+          className={classes.form__submit}
           value={'ADD'}
           type={'submit'}
         />

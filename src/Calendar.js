@@ -3,6 +3,11 @@ import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
 import CalendarProvider from './CalendarProvider'
 
+//      console.log(/[a-ząćęłńóśźż]{2,}/gi.test(value)) // true --- regrex firstName oraz lastName
+//      /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i --- email regrex
+//      /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/  --- date regrex
+//      /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/  --- hour regrex
+
 const initialFormData = {
   firstName: '',
   lastName: '',
@@ -51,7 +56,7 @@ export class Calendar extends React.Component {
       const inputValues = Array.from(Object.values(form))
 
       return (
-        <>
+        <div>
           {!meetings ?
             'No meetings'
             :
@@ -63,7 +68,7 @@ export class Calendar extends React.Component {
             addMeeting={this.addMeeting}
             handleInput={this.handleInput}
           />
-        </>
+        </div>
       )
     }
 }

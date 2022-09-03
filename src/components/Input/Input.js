@@ -6,14 +6,20 @@ export class Input extends React.Component {
   render () {
     const { className, label, handleInput, ...otherProps } = this.props
     return (
-      <label>
-        {`${label}: `}
+      <>
+        <label
+          htmlFor={label}
+          className={classes.input__label}
+        >
+          {`${label}: `}
+        </label>
         <input
+          id={label}
           className={`${classes.root}${className ? ` ${className}` : ''}`}
           {...otherProps}
           onChange={(event) => handleInput(event, label)}
         />
-      </label>
+      </>
     )
   }
 }

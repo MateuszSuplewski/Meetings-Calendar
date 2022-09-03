@@ -12,11 +12,9 @@ export class CalendarItem extends React.Component {
         className={`${classes.root}${className ? ` ${className}` : ''}`}
         {...otherProps}
       >
-        <p>{firstName}</p>
-        <p>{lastName}</p>
-        <p>{email}</p>
-        <p>{date}</p>
-        <p>{time}</p>
+        <p className={classes.item__paragraph__name}>{firstName} {lastName}</p>
+        <p className={classes.item__paragraph__email}>{email}</p>
+        <p className={classes.item__paragraph__date}>{date} --- {time}</p>
       </li>
     )
   }

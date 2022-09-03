@@ -1,3 +1,26 @@
 .root{
+    min-width: 250px;
+    flex-basis: calc(20% - 8px);
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: rgba(74, 182, 47, 0.6);
+    border-radius: 10px;
+}
 
+
+.item__paragraph__name, .item__paragraph__email, .item__paragraph__date{
+    width: 100%;
+    text-align: center;
+}
+
+.item__paragraph__name{
+    font-size: 1.5rem;
+}
+
+.item__paragraph__email{
+    font-size: 1.2rem;
+}
+.item__paragraph__date{
+    font-size: 1.3rem;
+    font-weight: bold
 }
