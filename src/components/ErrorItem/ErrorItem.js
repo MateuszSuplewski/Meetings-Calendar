@@ -18,7 +18,7 @@ export class ErrorItem extends React.Component {
 
 ErrorItem.propTypes = {
   className: PropTypes.string,
-  error: PropTypes.string.isRequired // array of strings zrobic
+  error: PropTypes.string.isRequired
 }
 
 export default ErrorItem

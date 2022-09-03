@@ -6,23 +6,26 @@ import classes from './styles.module.css'
 
 export class CalendarForm extends React.Component {
   render () {
-    const { className, handleInput, addMeeting, inputNames, inputValues, formErrors, ...otherProps } = this.props
+    const { className, handleInput, form, formErrors, fields, ...otherProps } = this.props
     return (
       <form
-        onSubmit={addMeeting}
         className={`${classes.root}${className ? ` ${className}` : ''}`}
         {...otherProps}
       >
         {
-        inputNames.map((inputName, index) => (
-          <Input
-            key={inputName}
-            type={'text'}
-            value={inputValues[index]}
-            label={inputName}
-            handleInput={handleInput}
-          />
-        )
+        fields.map((field) => {
+          const { name, label } = field
+          const inputValue = form[name]
+          return (
+            <Input
+              key={name}
+              value={inputValue}
+              label={label}
+              name={name}
+              onChange={handleInput}
+            />
+          )
+        }
         )}
         <ErrorList formErrors={formErrors}/>
         <input
@@ -35,13 +38,25 @@ export class CalendarForm extends React.Component {
   }
 }
 
+const fieldsPrototype = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+})
+
+const formPrototype = PropTypes.shape({
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  time: PropTypes.string.isRequired
+})
+
 CalendarForm.propTypes = {
   className: PropTypes.string,
   handleInput: PropTypes.func.isRequired,
-  addMeeting: PropTypes.func.isRequired,
-  inputNames: PropTypes.array.isRequired,
-  inputValues: PropTypes.array.isRequired,
-  formErrors: PropTypes.array.isRequired // array of strings zrobic
+  formErrors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fields: PropTypes.arrayOf(fieldsPrototype).isRequired,
+  form: formPrototype.isRequired
 }
 
 export default CalendarForm

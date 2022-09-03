@@ -4,7 +4,7 @@ import classes from './styles.module.css'
 
 export class Input extends React.Component {
   render () {
-    const { className, label, handleInput, ...otherProps } = this.props
+    const { className, label, ...otherProps } = this.props
     return (
       <>
         <label
@@ -17,7 +17,6 @@ export class Input extends React.Component {
           id={label}
           className={`${classes.root}${className ? ` ${className}` : ''}`}
           {...otherProps}
-          onChange={(event) => handleInput(event, label)}
         />
       </>
     )
@@ -26,7 +25,6 @@ export class Input extends React.Component {
 
 Input.propTypes = {
   className: PropTypes.string,
-  handleInput: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired
 }
 

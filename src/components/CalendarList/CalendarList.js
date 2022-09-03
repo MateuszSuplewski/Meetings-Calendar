@@ -6,7 +6,6 @@ import CalendarItem from '../CalendarItem'
 export class CalendarList extends React.Component {
   render () {
     const { className, meetings, ...otherProps } = this.props
-
     return (
       <ul
         className={`${classes.root}${className ? ` ${className}` : ''}`}

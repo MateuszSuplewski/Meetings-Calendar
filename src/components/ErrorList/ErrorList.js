@@ -27,7 +27,7 @@ export class ErrorList extends React.Component {
 
 ErrorList.propTypes = {
   className: PropTypes.string,
-  formErrors: PropTypes.array.isRequired // array of strings zrobic
+  formErrors: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 export default ErrorList

@@ -2,6 +2,7 @@ import React from 'react'
 import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
 import CalendarProvider from './CalendarProvider'
+import fields from './formFieldsData'
 
 const initialFormData = {
   firstName: '',
@@ -9,14 +10,6 @@ const initialFormData = {
   email: '',
   date: '',
   time: ''
-}
-
-const inputValidators = {
-  firstNameRegrex: /[a-ząćęłńóśźż]{2,}/i,
-  lastNameRerex: /[a-ząćęłńóśźż]{2,}/i,
-  emailRegrex: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-  dateRegrex: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
-  timeRegrex: /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/
 }
 
 export class Calendar extends React.Component {
@@ -27,6 +20,29 @@ export class Calendar extends React.Component {
     }
 
     api = new CalendarProvider('http://localhost:3005')
+
+    isFormValid = () => {
+      const { form } = this.state
+      let errors = []
+
+      fields.forEach(field => {
+        const { name, pattern, label } = field
+        const inputValue = form[name]
+
+        if (inputValue.length === 0) {
+          errors = errors.concat(`Dane w polu ${label} są wymagane!`)
+          return
+        }
+
+        if (inputValue.match(pattern)) return
+
+        errors = errors.concat(`Dane w polu ${label} są niepoprawnie wprowadzone!`)
+      })
+
+      this.setState({ formErrors: [...errors] })
+
+      return errors.length === 0
+    }
 
     addMeeting = () => {
       const { meetings, form } = this.state
@@ -41,28 +57,15 @@ export class Calendar extends React.Component {
         })
     }
 
-    isFormValid = () => {
-      const { form } = this.state
-      const inputNames = Array.from(Object.keys(form))
-      const inputValidatorValues = Array.from(Object.values(inputValidators))
-      const inputValues = Array.from(Object.values(form))
-      let errors = []
-
-      inputValues.forEach((inputValue, index) => {
-        if (inputValidatorValues[index].test(inputValue)) return
-
-        errors = errors.concat(`${inputNames[index]} is not passing requirements!`)
-      })
-
-      this.setState({ formErrors: [...errors] })
-
-      return errors.length === 0
+    loadMeetings = () => {
+      this.api.load('meetings')
+        .then(data => this.setState({ meetings: [...data] }))
     }
 
-    handleInput = (event, inputName) => {
-      const { value } = event.target
+    handleInput = (event) => {
+      const { value, name } = event.target
       const form = { ...this.state.form }
-      form[inputName] = value
+      form[name] = value
       this.setState({ form })
     }
 
@@ -73,15 +76,11 @@ export class Calendar extends React.Component {
     }
 
     componentDidMount () {
-      this.api.load('meetings')
-        .then(data => this.setState({ meetings: [...data] }))
+      this.loadMeetings()
     }
 
     render () {
       const { meetings, form, formErrors } = this.state
-      const inputNames = Array.from(Object.keys(form))
-      const inputValues = Array.from(Object.values(form))
-
       return (
         <div>
           {!meetings ?
@@ -90,11 +89,12 @@ export class Calendar extends React.Component {
             <CalendarList meetings={meetings}/>
           }
           <CalendarForm
-            inputNames={inputNames}
-            inputValues={inputValues}
-            addMeeting={this.handleSubmit}
+
+            fields={fields}
+            onSubmit={this.handleSubmit}
             handleInput={this.handleInput}
             formErrors={formErrors}
+            form={form}
           />
         </div>
       )
