@@ -3,11 +3,6 @@ import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
 import CalendarProvider from './CalendarProvider'
 
-//      console.log(/[a-ząćęłńóśźż]{2,}/gi.test(value)) // true --- regrex firstName oraz lastName
-//      /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i --- email regrex
-//      /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/  --- date regrex
-//      /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/  --- hour regrex
-
 const initialFormData = {
   firstName: '',
   lastName: '',
@@ -16,21 +11,24 @@ const initialFormData = {
   time: ''
 }
 
+const inputValidators = {
+  firstNameRegrex: /[a-ząćęłńóśźż]{2,}/i,
+  lastNameRerex: /[a-ząćęłńóśźż]{2,}/i,
+  emailRegrex: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+  dateRegrex: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+  timeRegrex: /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/
+}
+
 export class Calendar extends React.Component {
     state = {
       meetings: null,
-      form: initialFormData
+      form: initialFormData,
+      formErrors: []
     }
 
     api = new CalendarProvider('http://localhost:3005')
 
-    componentDidMount () {
-      this.api.load('meetings')
-        .then(data => this.setState({ meetings: [...data] }))
-    }
-
-    addMeeting = (event) => {
-      event.preventDefault()
+    addMeeting = () => {
       const { meetings, form } = this.state
 
       this.api.add(form, 'meetings')
@@ -43,6 +41,24 @@ export class Calendar extends React.Component {
         })
     }
 
+    isFormValid = () => {
+      const { form } = this.state
+      const inputNames = Array.from(Object.keys(form))
+      const inputValidatorValues = Array.from(Object.values(inputValidators))
+      const inputValues = Array.from(Object.values(form))
+      let errors = []
+
+      inputValues.forEach((inputValue, index) => {
+        if (inputValidatorValues[index].test(inputValue)) return
+
+        errors = errors.concat(`${inputNames[index]} is not passing requirements!`)
+      })
+
+      this.setState({ formErrors: [...errors] })
+
+      return errors.length === 0
+    }
+
     handleInput = (event, inputName) => {
       const { value } = event.target
       const form = { ...this.state.form }
@@ -50,8 +66,19 @@ export class Calendar extends React.Component {
       this.setState({ form })
     }
 
+    handleSubmit = (event) => {
+      event.preventDefault()
+
+      if (this.isFormValid()) this.addMeeting()
+    }
+
+    componentDidMount () {
+      this.api.load('meetings')
+        .then(data => this.setState({ meetings: [...data] }))
+    }
+
     render () {
-      const { meetings, form } = this.state
+      const { meetings, form, formErrors } = this.state
       const inputNames = Array.from(Object.keys(form))
       const inputValues = Array.from(Object.values(form))
 
@@ -65,8 +92,9 @@ export class Calendar extends React.Component {
           <CalendarForm
             inputNames={inputNames}
             inputValues={inputValues}
-            addMeeting={this.addMeeting}
+            addMeeting={this.handleSubmit}
             handleInput={this.handleInput}
+            formErrors={formErrors}
           />
         </div>
       )
