@@ -3,6 +3,8 @@ import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
 import CalendarProvider from './CalendarProvider'
 import fields from './formFieldsData'
+import Input from './components/Input'
+import SuggestionList from './components/SuggestionList'
 
 const initialFormData = {
   firstName: '',
@@ -16,7 +18,9 @@ export class Calendar extends React.Component {
     state = {
       meetings: null,
       form: initialFormData,
-      formErrors: []
+      formErrors: [],
+      autoComplete: '',
+      suggestions: []
     }
 
     api = new CalendarProvider('http://localhost:3005')
@@ -79,8 +83,38 @@ export class Calendar extends React.Component {
       this.loadMeetings()
     }
 
+    handleAutoComplete = (event) => {
+      const { value } = event.target
+
+      if (!value) {
+        this.loadMeetings()
+      }
+
+      this.setState({ autoComplete: value }, () => this.loadAutoComplete())
+    }
+
+    loadAutoComplete = () => {
+      const { autoComplete } = this.state
+
+      this.api.load(`meetings?firstName_like=${autoComplete}`)
+        .then(data => this.setState({ suggestions: [...data] }))
+    }
+
+    handleAutoCompleteClick = (event) => {
+      const { innerText } = event.target
+
+      this.setState({ autoComplete: innerText, suggestions: [] }, () => this.loadMeetingsAfterAutoComplete())
+    }
+
+    loadMeetingsAfterAutoComplete = () => {
+      const { autoComplete } = this.state
+
+      this.api.load(`meetings?firstName_like=${autoComplete}`)
+        .then(data => this.setState({ meetings: [...data] }))
+    }
+
     render () {
-      const { meetings, form, formErrors } = this.state
+      const { meetings, form, formErrors, autoComplete, suggestions } = this.state
       return (
         <div>
           {!meetings ?
@@ -95,6 +129,15 @@ export class Calendar extends React.Component {
             handleInput={this.handleInput}
             formErrors={formErrors}
             form={form}
+          />
+          <Input
+            value={autoComplete}
+            onChange={this.handleAutoComplete}
+            label={'Look for meeting by name'}
+          />
+          <SuggestionList
+            suggestions={suggestions}
+            handleAutoCompleteClick = {this.handleAutoCompleteClick}
           />
         </div>
       )

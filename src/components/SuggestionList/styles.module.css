@@ -1,0 +1,13 @@
+.root{
+    list-style-type: none;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    box-sizing: content-box;
+    margin: 12px;
+}
+
+
