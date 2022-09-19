@@ -1,0 +1,22 @@
+@media only screen and (min-width: 300px){
+    .root{
+        display: flex;
+        flex-wrap: wrap;
+        position: absolute;
+        top: 680px;
+        width: 33.3333%;
+        max-width: 250px;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 12px;
+        background: linear-gradient(56deg, rgba(40,113,180,0.29175420168067223) 0%, rgba(115,187,252,0.30015756302521013) 100%);
+    }
+
+}
+
+@media only screen and (min-width: 1024px){
+    .root{
+        max-width: 250px;
+        width: 20%;
+    }
+}

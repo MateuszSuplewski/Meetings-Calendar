@@ -1,11 +1,22 @@
-.root{
-    list-style: none;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-inline-start: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    box-sizing: content-box;
-    margin: 12px;
+
+@media only screen and (min-width: 300px){
+    .root{
+        box-sizing: content-box;
+        list-style: none;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        padding-inline-start: 0;
+        display: flex;
+        flex-basis: 55%;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 12px;
+        min-width: 280px;
+    }
+}
+
+@media only screen and (min-width: 1024px){
+    .root{
+        flex-basis: 70%;
+    }
 }

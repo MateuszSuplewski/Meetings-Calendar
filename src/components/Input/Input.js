@@ -15,7 +15,7 @@ export class Input extends React.Component {
         </label>
         <input
           id={label}
-          className={`${classes.root}${className ? ` ${className}` : ''}`}
+          className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
           {...otherProps}
         />
       </>

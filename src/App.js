@@ -3,9 +3,9 @@ import Calendar from './Calendar'
 
 export const App = () => {
   return (
-    <div>
+    <>
       <Calendar/>
-    </div>
+    </>
   )
 }
 

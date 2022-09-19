@@ -23,16 +23,17 @@ export class CalendarForm extends React.Component {
               label={label}
               name={name}
               onChange={handleInput}
+              className={'input__meetingForm'}
             />
           )
         }
         )}
-        <ErrorList formErrors={formErrors}/>
         <input
           className={classes.form__submit}
-          value={'ADD'}
+          value={'Dodaj spotkanie'}
           type={'submit'}
         />
+        <ErrorList formErrors={formErrors}/>
       </form>
     )
   }

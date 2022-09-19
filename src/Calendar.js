@@ -3,8 +3,7 @@ import CalendarList from './components/CalendarList'
 import CalendarForm from './components/CalendarForm'
 import CalendarProvider from './CalendarProvider'
 import fields from './formFieldsData'
-import Input from './components/Input'
-import SuggestionList from './components/SuggestionList'
+import AutoComplete from './components/AutoComplete'
 
 const initialFormData = {
   firstName: '',
@@ -66,6 +65,21 @@ export class Calendar extends React.Component {
         .then(data => this.setState({ meetings: [...data] }))
     }
 
+    loadMeetingsByFirstName = () => {
+      this.getSuggestions()
+        .then(data => this.setState({ meetings: [...data] }))
+    }
+
+    loadSuggestions = () => {
+      this.getSuggestions()
+        .then(data => this.setState({ suggestions: [...data] }))
+    }
+
+    getSuggestions = () => {
+      const { autoComplete } = this.state
+      return this.api.load(`meetings?firstName_like=${autoComplete}`)
+    }
+
     handleInput = (event) => {
       const { value, name } = event.target
       const form = { ...this.state.form }
@@ -79,65 +93,58 @@ export class Calendar extends React.Component {
       if (this.isFormValid()) this.addMeeting()
     }
 
-    componentDidMount () {
-      this.loadMeetings()
+    handleSuggestionClick = (event) => {
+      const { innerText } = event.target
+
+      this.setState({ autoComplete: innerText, suggestions: [] }, () => this.loadMeetingsByFirstName())
     }
 
     handleAutoComplete = (event) => {
       const { value } = event.target
 
-      if (!value) {
-        this.loadMeetings()
+      if (!value) this.loadMeetings()
+
+      if (value.length < 2) {
+        this.setState({ suggestions: [], autoComplete: value })
+        return
       }
 
-      this.setState({ autoComplete: value }, () => this.loadAutoComplete())
+      this.setState({ autoComplete: value }, () => this.loadSuggestions())
     }
 
-    loadAutoComplete = () => {
-      const { autoComplete } = this.state
-
-      this.api.load(`meetings?firstName_like=${autoComplete}`)
-        .then(data => this.setState({ suggestions: [...data] }))
-    }
-
-    handleAutoCompleteClick = (event) => {
-      const { innerText } = event.target
-
-      this.setState({ autoComplete: innerText, suggestions: [] }, () => this.loadMeetingsAfterAutoComplete())
-    }
-
-    loadMeetingsAfterAutoComplete = () => {
-      const { autoComplete } = this.state
-
-      this.api.load(`meetings?firstName_like=${autoComplete}`)
-        .then(data => this.setState({ meetings: [...data] }))
+    componentDidMount () {
+      this.loadMeetings()
     }
 
     render () {
       const { meetings, form, formErrors, autoComplete, suggestions } = this.state
       return (
-        <div>
-          {!meetings ?
-            'No meetings'
-            :
-            <CalendarList meetings={meetings}/>
-          }
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            position: 'relative',
+            justifyContent: 'space-between',
+            alignContent: 'flex-start'
+          }}
+        >
           <CalendarForm
-
             fields={fields}
             onSubmit={this.handleSubmit}
             handleInput={this.handleInput}
             formErrors={formErrors}
             form={form}
           />
-          <Input
-            value={autoComplete}
-            onChange={this.handleAutoComplete}
-            label={'Look for meeting by name'}
-          />
-          <SuggestionList
+          {!meetings ?
+            'No meetings'
+            :
+            <CalendarList meetings={meetings}/>
+          }
+          <AutoComplete
             suggestions={suggestions}
-            handleAutoCompleteClick = {this.handleAutoCompleteClick}
+            handleSuggestionClick = {this.handleSuggestionClick}
+            autoComplete={autoComplete}
+            handleAutoComplete={this.handleAutoComplete}
           />
         </div>
       )

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import SuggestionItem from '../SuggestionItem'
 import classes from './styles.module.css'
 
-export class Suggestion extends React.Component {
+export class SuggestionList extends React.Component {
   render () {
-    const { className, suggestions, handleAutoCompleteClick, ...otherProps } = this.props
+    const { className, suggestions, handleSuggestionClick, ...otherProps } = this.props
     return (
       <ul
         className={`${classes.root}${className ? ` ${className}` : ''}`}
@@ -18,7 +18,7 @@ export class Suggestion extends React.Component {
               <SuggestionItem
                 key={id}
                 suggestion={firstName}
-                onClick={handleAutoCompleteClick}
+                onClick={handleSuggestionClick}
               />
             )
           }
@@ -29,10 +29,10 @@ export class Suggestion extends React.Component {
   }
 }
 
-Suggestion.propTypes = {
+SuggestionList.propTypes = {
   className: PropTypes.string,
   suggestions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleAutoCompleteClick: PropTypes.func.isRequired
+  handleSuggestionClick: PropTypes.func.isRequired
 }
 
-export default Suggestion
+export default SuggestionList
