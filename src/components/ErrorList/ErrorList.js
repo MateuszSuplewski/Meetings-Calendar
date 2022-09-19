@@ -8,7 +8,7 @@ export class ErrorList extends React.Component {
     const { className, formErrors, ...otherProps } = this.props
     return (
       <ul
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         {

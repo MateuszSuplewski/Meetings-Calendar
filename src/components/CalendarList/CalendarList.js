@@ -8,7 +8,7 @@ export class CalendarList extends React.Component {
     const { className, meetings, ...otherProps } = this.props
     return (
       <ul
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         {meetings.map((meeting) => (

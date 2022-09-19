@@ -7,7 +7,7 @@ export class ErrorItem extends React.Component {
     const { className, error, ...otherProps } = this.props
     return (
       <li
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         {error}

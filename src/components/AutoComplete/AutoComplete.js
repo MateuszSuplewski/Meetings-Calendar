@@ -10,7 +10,7 @@ export class AutoComplete extends React.Component {
 
     return (
       <form
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         <Input

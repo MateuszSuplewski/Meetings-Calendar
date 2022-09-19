@@ -9,12 +9,13 @@ export class CalendarForm extends React.Component {
     const { className, handleInput, form, formErrors, fields, ...otherProps } = this.props
     return (
       <form
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
+        noValidate
       >
         {
         fields.map((field) => {
-          const { name, label } = field
+          const { name, label, type } = field
           const inputValue = form[name]
           return (
             <Input
@@ -23,6 +24,7 @@ export class CalendarForm extends React.Component {
               label={label}
               name={name}
               onChange={handleInput}
+              type={type}
               className={'input__meetingForm'}
             />
           )

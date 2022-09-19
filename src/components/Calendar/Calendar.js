@@ -1,17 +1,11 @@
 import React from 'react'
-import CalendarList from './components/CalendarList'
-import CalendarForm from './components/CalendarForm'
-import CalendarProvider from './CalendarProvider'
-import fields from './formFieldsData'
-import AutoComplete from './components/AutoComplete'
-
-const initialFormData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  date: '',
-  time: ''
-}
+import CalendarList from '../CalendarList'
+import CalendarForm from '../CalendarForm'
+import AutoComplete from '../AutoComplete'
+import CalendarProvider from '../../helpers/CalendarProvider'
+import fields from '../../helpers/formFieldsData'
+import initialFormData from '../../helpers/initialFormData'
+import classes from './styles.module.css'
 
 export class Calendar extends React.Component {
     state = {
@@ -29,7 +23,7 @@ export class Calendar extends React.Component {
       let errors = []
 
       fields.forEach(field => {
-        const { name, pattern, label } = field
+        const { name, pattern, label, error } = field
         const inputValue = form[name]
 
         if (inputValue.length === 0) {
@@ -39,7 +33,7 @@ export class Calendar extends React.Component {
 
         if (inputValue.match(pattern)) return
 
-        errors = errors.concat(`Dane w polu ${label} są niepoprawnie wprowadzone!`)
+        errors = errors.concat(error)
       })
 
       this.setState({ formErrors: [...errors] })
@@ -119,15 +113,7 @@ export class Calendar extends React.Component {
     render () {
       const { meetings, form, formErrors, autoComplete, suggestions } = this.state
       return (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            position: 'relative',
-            justifyContent: 'space-between',
-            alignContent: 'flex-start'
-          }}
-        >
+        <div className={`${classes.root}`}>
           <CalendarForm
             fields={fields}
             onSubmit={this.handleSubmit}

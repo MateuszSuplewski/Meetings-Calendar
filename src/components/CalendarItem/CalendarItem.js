@@ -9,7 +9,7 @@ export class CalendarItem extends React.Component {
 
     return (
       <li
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         <p className={classes.item__paragraph__name}>{firstName} {lastName}</p>

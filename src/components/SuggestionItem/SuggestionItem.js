@@ -7,7 +7,7 @@ export class SuggestionItem extends React.Component {
     const { className, suggestion, ...otherProps } = this.props
     return (
       <li
-        className={`${classes.root}${className ? ` ${className}` : ''}`}
+        className={`${classes.root}${className ? ' ' + classes[className] : ''}`}
         {...otherProps}
       >
         {suggestion}
